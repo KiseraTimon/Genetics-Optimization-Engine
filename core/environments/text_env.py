@@ -6,7 +6,7 @@ Implementation of the Synthetic Text Evolution sandbox.
 import random
 import string
 from typing import List
-from environments.base import BaseEnvironment
+from core.environments.base import BaseEnvironment
 
 
 class TextEnvironment(BaseEnvironment):

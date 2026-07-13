@@ -6,7 +6,7 @@ Empirical spatial optimization environment.
 import random
 import math
 from typing import List, Tuple
-from environments.base import BaseEnvironment
+from core.environments.base import BaseEnvironment
 
 class TSPEnvironment(BaseEnvironment):
     """
