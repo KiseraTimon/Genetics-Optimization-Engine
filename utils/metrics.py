@@ -27,19 +27,22 @@ class TelemetryTracker:
             best_fitness (float): The highest fitness score achieved in this generation.
             mutation_rate (float): The current mutation rate (useful for tracking dynamic scaling).
         """
-
         # Append the current state to our history tracker
         self.history.append({
             "generation": generation,
             "best_fitness": best_fitness,
             "mutation_rate": mutation_rate
         })
-
-        # Output a clean console log for real-time monitoring
+        
+        # Convert inverted fitness back to distance for human-readable logging
+        distance = 1.0 / best_fitness if best_fitness > 0 else float('inf')
+        
+        # Output expanded decimal tracking and physical distance
         print(
             f"Gen {generation:04d} | "
-            f"Max Fitness: {best_fitness:09.4f} | "
-            f"Active Mutation Rate: {mutation_rate:.3f}"
+            f"Fitness: {best_fitness:.7f} | "
+            f"Distance: {distance:08.2f} | "
+            f"Mut Rate: {mutation_rate:.3f}"
         )
 
     def export_to_csv(self, filename: str = "evolution_telemetry.csv") -> None:
