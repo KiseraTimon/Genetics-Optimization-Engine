@@ -92,7 +92,9 @@ class EvolutionEngine:
                     break
 
                 # Build Next Generation (Phase 3, 4, 5)
-                next_generation = [Chromosome(best_ind.genes.copy())] # Elitism
+                elite_clone = Chromosome(best_ind.genes.copy())
+                elite_clone.fitness = best_ind.fitness
+                next_generation = [elite_clone] # Elitism
                 
                 while len(next_generation) < self.pop_size:
                     # Selection
