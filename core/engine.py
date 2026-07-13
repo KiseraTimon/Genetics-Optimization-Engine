@@ -49,11 +49,11 @@ class EvolutionEngine:
             Chromosome(self.env.generate_random_chromosome())
             for _ in range(self.pop_size)
         ]
-
+        
     def _evaluate_fitness_parallel(self):
-        """Phase 2: Evaluate fitness using ThreadPoolExecutor for scaling."""
-        with ThreadPoolExecutor() as executor:
-            fitnesses = list(executor.map(self.env.evaluate_fitness, [ind.genes for ind in self.population]))
+        """Phase 2: Evaluate fitness synchronously to avoid Python GIL overhead."""
+        # fix: Removed ThreadPoolExecutor. Standard iteration is significantly faster here.
+        fitnesses = [self.env.evaluate_fitness(ind.genes) for ind in self.population]
             
         for ind, fit in zip(self.population, fitnesses):
             ind.fitness = fit
