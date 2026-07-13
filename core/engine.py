@@ -78,37 +78,40 @@ class EvolutionEngine:
         """Executes the discrete-time generational loop."""
         self._initialize_population()
 
-        for gen in range(max_generations):
-            self._evaluate_fitness_parallel()
-            best_ind = self.population[0]
-            
-            self._adapt_mutation_rate(best_ind.fitness)
-            self.telemetry.log(gen, best_ind.fitness, self.current_mutation_rate)
-
-            # Check if environment dictates the problem is solved
-            if self.env.is_solved:
-                print(f"\n[!] Global optimum achieved at Generation {gen}.")
-                break
-
-            # Build Next Generation (Phase 3, 4, 5)
-            next_generation = [Chromosome(best_ind.genes.copy())] # Elitism
-            
-            while len(next_generation) < self.pop_size:
-                # Selection
-                p1 = self.selector.select(self.population)
-                p2 = self.selector.select(self.population)
+        try:
+            for gen in range(max_generations):
+                self._evaluate_fitness_parallel()
+                best_ind = self.population[0]
                 
-                # Crossover
-                c1, c2 = self.crossover_op.crossover(p1, p2)
-                
-                # Mutation
-                self.mutator.mutate(c1, self.current_mutation_rate)
-                self.mutator.mutate(c2, self.current_mutation_rate)
-                
-                next_generation.extend([c1, c2])
+                self._adapt_mutation_rate(best_ind.fitness)
+                self.telemetry.log(gen, best_ind.fitness, self.current_mutation_rate)
 
-            self.population = next_generation[:self.pop_size]
+                # Check if environment dictates the problem is solved
+                if self.env.is_solved:
+                    print(f"\n[!] Global optimum achieved at Generation {gen}.")
+                    break
 
-        # Post-run cleanup and export
-        self.telemetry.export_to_csv("evolution_telemetry.csv")
+                # Build Next Generation (Phase 3, 4, 5)
+                next_generation = [Chromosome(best_ind.genes.copy())] # Elitism
+                
+                while len(next_generation) < self.pop_size:
+                    # Selection
+                    p1 = self.selector.select(self.population)
+                    p2 = self.selector.select(self.population)
+                    
+                    # Crossover
+                    c1, c2 = self.crossover_op.crossover(p1, p2)
+                    
+                    # Mutation
+                    self.mutator.mutate(c1, self.current_mutation_rate)
+                    self.mutator.mutate(c2, self.current_mutation_rate)
+                    
+                    next_generation.extend([c1, c2])
+
+                self.population = next_generation[:self.pop_size]
+                
+        finally:
+            # Post-run cleanup and export
+            self.telemetry.export_to_csv("evolution_telemetry.csv")
+
         return self.population[0]

@@ -14,8 +14,8 @@ def main():
     print("Initializing Engineered GA Framework: TSP Module")
     print("=" * 60)
     
-    # 1. Initialize Spatial Environment (50 cities)
-    env = TSPEnvironment(num_cities=50, grid_size=1000)
+    # 1. Initialize Spatial Environment (20 cities)
+    env = TSPEnvironment(num_cities=20, grid_size=1000)
     
     # 2. Inject Strategy Patterns strictly designed for path optimization
     selector = TournamentSelection(tournament_size=5)
